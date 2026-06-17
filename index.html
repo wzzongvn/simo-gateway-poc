@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>InfoPlus · SIMO Reporting Gateway</title>
+<style>
+  :root{--navy:#003F73;--blue:#0574CC;--sky:#5299C1;--ink:#24313D;--gray:#6B7785;
+    --hair:#D5DEE6;--light:#F3F8FC;--code:#F6F9FC;--ok:#1f8a4c;--warn:#b4232a;--amber:#a86a00;}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Malgun Gothic","Segoe UI",system-ui,sans-serif;color:var(--ink);background:#eef3f8;font-size:14px}
+  .app{display:flex;min-height:100vh}
+  .side{width:230px;flex:0 0 230px;background:var(--navy);color:#dce8f3}
+  .brand{padding:17px 18px 13px;border-bottom:1px solid rgba(255,255,255,.12)}
+  .brand .mk{font-size:20px;font-weight:800}.brand .mk .i{color:#fff}.brand .mk .p{color:#7fc1ff}
+  .brand .sq{display:inline-block;width:11px;height:11px;margin-right:2px;vertical-align:middle}
+  .brand .sub{font-size:11px;color:#9fc0dd;margin-top:6px}
+  .nav{padding:10px 0}
+  .nav button{display:flex;gap:9px;align-items:center;width:100%;background:none;border:0;color:#cfe0ef;text-align:left;
+    padding:11px 18px;font-size:13.5px;cursor:pointer;font-family:inherit;border-left:3px solid transparent}
+  .nav button:hover{background:rgba(255,255,255,.06)}
+  .nav button.active{background:rgba(255,255,255,.12);color:#fff;border-left-color:#7fc1ff;font-weight:700}
+  .nav .ico{width:18px;text-align:center}
+  .side .foot{padding:14px 18px;font-size:10.5px;color:#8fb2d2;margin-top:8px}
+  .main{flex:1;min-width:0;display:flex;flex-direction:column}
+  .top{background:#fff;border-bottom:1px solid var(--hair);padding:11px 24px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .top h1{font-size:16px;margin:0;color:var(--navy)}
+  .top .ctrls{display:flex;align-items:center;gap:10px}
+  .badge{background:#fff3cd;color:var(--amber);border:1px solid #f0d98c;border-radius:20px;padding:4px 11px;font-size:11px;font-weight:700}
+  select.ui{border:1.3px solid var(--hair);border-radius:6px;padding:6px 9px;font-size:12.5px;font-family:inherit;color:var(--ink);background:#fff}
+  .wrap{padding:20px 24px;max-width:1120px}
+  h2.sec{font-size:15px;margin:2px 0 14px;display:flex;align-items:center;gap:7px}
+  h2.sec .sq{width:11px;height:11px;display:inline-block}
+  .muted{color:var(--gray)} .small{font-size:11.5px;color:var(--gray)}
+  .cards{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-bottom:18px}
+  .card{background:#fff;border:1px solid var(--hair);border-radius:10px;padding:13px 14px}
+  .card .k{font-size:11px;color:var(--gray)}
+  .card .v{font-size:22px;font-weight:800;color:var(--navy);margin-top:4px}
+  .panel{background:#fff;border:1px solid var(--hair);border-radius:10px;padding:17px;margin-bottom:16px}
+  .panel h3{font-size:13px;margin:0 0 12px;color:var(--blue)}
+  .row{display:flex;gap:14px;flex-wrap:wrap}.row>.panel{flex:1;min-width:300px}
+  table{width:100%;border-collapse:collapse;font-size:12.5px}
+  th{color:var(--blue);text-align:left;font-weight:700;border-top:2px solid var(--navy);border-bottom:1px solid var(--hair);padding:8px 9px;white-space:nowrap}
+  td{border-bottom:1px solid var(--hair);padding:7px 9px}
+  tr:last-child td{border-bottom:2px solid var(--navy)}
+  td.c,th.c{text-align:center}
+  .tag{display:inline-block;padding:2px 8px;border-radius:11px;font-size:11px;font-weight:700;white-space:nowrap}
+  .tag.reg{background:#e5f0f8;color:var(--blue)}.tag.sus{background:#fde7e7;color:var(--warn)}
+  .tag.SENT{background:#e3f3ea;color:var(--ok)}.tag.DRAFT{background:#eef1f4;color:var(--gray)}
+  .tag.APPROVED{background:#e5f0f8;color:var(--blue)}.tag.PARTIAL{background:#fff3cd;color:var(--amber)}.tag.FAILED{background:#fde7e7;color:var(--warn)}
+  button.btn{background:var(--navy);color:#fff;border:0;border-radius:7px;padding:8px 14px;font-size:12.5px;cursor:pointer;font-family:inherit;font-weight:600}
+  button.btn:hover{background:#013362}
+  button.btn.blue{background:var(--blue)}button.btn.blue:hover{background:#045aa0}
+  button.btn.ghost{background:#fff;color:var(--navy);border:1.3px solid var(--navy)}button.btn.ghost:hover{background:var(--light)}
+  button.btn.sm{padding:5px 10px;font-size:11.5px}
+  button.btn:disabled{background:#c4ccd4;cursor:not-allowed;border-color:#c4ccd4;color:#fff}
+  .btnrow{display:flex;gap:9px;flex-wrap:wrap;align-items:center}
+  input.ui,select.ui2{border:1.3px solid var(--hair);border-radius:6px;padding:8px 10px;font-size:12.5px;font-family:inherit;color:var(--ink)}
+  pre{background:var(--code);border:1px solid var(--hair);border-radius:8px;padding:12px;font-family:Consolas,monospace;font-size:11.5px;
+    overflow:auto;max-height:300px;margin:0;white-space:pre-wrap;word-break:break-all}
+  .chart{display:flex;align-items:flex-end;gap:9px;height:120px;padding-top:8px}
+  .chart .bar{flex:1;background:linear-gradient(180deg,var(--blue),var(--sky));border-radius:4px 4px 0 0;position:relative;min-height:3px}
+  .chart .bar span{position:absolute;top:-16px;left:0;right:0;text-align:center;font-size:10px;color:var(--gray)}
+  .chart .bar em{position:absolute;bottom:-18px;left:0;right:0;text-align:center;font-size:9.5px;color:var(--gray);font-style:normal}
+  .pill{font-size:11px;padding:3px 9px;border-radius:11px;border:1px solid var(--hair);color:var(--gray)}
+  .pill.on{background:#e3f3ea;color:var(--ok);border-color:#bfe6cd}
+  .hint{background:var(--light);border-left:3px solid var(--sky);padding:9px 12px;border-radius:0 6px 6px 0;font-size:12px;margin:6px 0 14px}
+  .hint.warn{background:#fdf3f3;border-left-color:var(--warn)}
+  .pager{display:flex;gap:8px;align-items:center;margin-top:10px;font-size:12px}
+  .log{font-family:Consolas,monospace;font-size:11.5px;max-height:200px;overflow:auto;background:#0c2742;color:#cfe3f5;border-radius:8px;padding:11px;line-height:1.7}
+  .hide{display:none}
+  .modal-bg{position:fixed;inset:0;background:rgba(8,24,40,.55);display:none;align-items:center;justify-content:center;z-index:50}
+  .modal-bg.show{display:flex}
+  .modal{background:#fff;border-radius:12px;max-width:560px;width:90%;padding:22px;box-shadow:0 20px 60px rgba(0,0,0,.3);max-height:84vh;overflow:auto}
+  .modal.warn{border-top:5px solid var(--warn)}
+  .modal h4{margin:4px 0 8px;font-size:16px}.modal.warn h4{color:var(--warn)}
+  .modal .ic{font-size:34px;text-align:center}
+  .kv{font-size:12px;color:var(--gray);margin-bottom:8px}
+  code.k{background:var(--code);border:1px solid var(--hair);border-radius:4px;padding:1px 6px;font-family:Consolas,monospace;font-size:11px}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="brand">
+      <div class="mk"><span class="sq" style="background:#fff"></span><span class="sq" style="background:#7fc1ff;margin-right:7px"></span><span class="i">info</span><span class="p">plus</span></div>
+      <div class="sub" data-i18n="subtitle">SIMO Reporting Gateway</div>
+    </div>
+    <nav class="nav" id="nav">
+      <button data-view="dash" class="active"><span class="ico">&#9638;</span><span data-i18n="nav.dashboard">Dashboard</span></button>
+      <button data-view="accounts"><span class="ico">&#9921;</span><span data-i18n="nav.accounts">In-bank Data</span></button>
+      <button data-view="reports"><span class="ico">&#8613;</span><span data-i18n="nav.reports">Reporting</span></button>
+      <button data-view="sync"><span class="ico">&#8615;</span><span data-i18n="nav.sync">Suspect List</span></button>
+      <button data-view="screening"><span class="ico">&#9888;</span><span data-i18n="nav.screening">Screening</span></button>
+      <button data-view="audit"><span class="ico">&#8803;</span><span data-i18n="nav.audit">Audit Log</span></button>
+    </nav>
+    <div class="foot">PoC &middot; <span data-i18n="common.mockNote">Mock SIMO</span><br>node server.js &middot; :8787</div>
+  </aside>
+  <div class="main">
+    <div class="top">
+      <h1 id="viewTitle">Dashboard</h1>
+      <div class="ctrls">
+        <span class="badge">&#9679; DEMO</span>
+        <span class="small" data-i18n="role.label">Role</span>
+        <select class="ui" id="roleSel"><option value="maker">maker</option><option value="checker">checker</option><option value="admin">admin</option></select>
+        <select class="ui" id="langSel"><option value="ko">&#54620;&#44397;&#50612;</option><option value="en">English</option><option value="vi">Ti&#7871;ng Vi&#7879;t</option></select>
+      </div>
+    </div>
+    <div class="wrap" id="view"></div>
+  </div>
+</div>
+<div class="modal-bg" id="modalBg"><div class="modal" id="modal"></div></div>
+<script src="app.js"></script>
+</body>
+</html>
