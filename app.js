@@ -11,7 +11,7 @@ const I18N={
   "out.segToday":"실시간 현황(오늘)","out.segDate":"일자별 조회","out.perApi":"API별 오늘 요약","out.recent":"최근 거래","out.gen":"데모 거래 생성",
   "out.cCount":"건수","out.cOk":"성공","out.cPartial":"부분","out.cFail":"실패","out.cTarget":"대상건수","out.cApi":"API","out.cMode":"방식","out.cTime":"시각","out.cResult":"결과","out.none":"거래 없음","out.filtered":"API 필터",
   "out.from":"시작일","out.to":"종료일","out.api":"API","out.dailySum":"일자별 요약","out.cDate":"일자","out.dayDetail":"일자 상세 (시간별)",
-  "out.dTitle":"거래 상세 (SIMO 전송 전문)","out.req":"요청","out.res":"응답","out.recvN":"SIMO 수신","out.rejN":"반려","out.rejList":"반려 내역","out.body":"전문 본문 (표본)","out.map":"레이아웃 매핑","out.raw":"원문(JSON)","out.rec":"표본","out.fNo":"No","out.fName":"필드","out.fType":"타입","out.fReq":"필수","out.fDesc":"설명","out.fVal":"값",
+  "out.dTitle":"거래 상세 (SIMO 전송 전문)","out.req":"요청","out.res":"응답","out.recvN":"SIMO 수신","out.rejN":"반려","out.rejList":"반려 내역","out.body":"전문 본문 (표본)","out.map":"레이아웃 매핑","out.raw":"원문(JSON)","out.rec":"표본","out.fNo":"No","out.fName":"필드","out.fType":"타입","out.fReq":"필수","out.fDesc":"설명","out.fVal":"값","out.allRecs":"전체 대상 레코드","out.search":"계좌·고객명·CIF·전화 검색","out.cAcc":"계좌번호","out.cDob":"생년월일","out.cStatus":"상태","out.statusOK":"정상","out.noMatch":"검색 결과가 없습니다","out.showing":"표시",
   "mode.BATCH":"배치","mode.EVENT":"건별",
   "in.title":"SIMO → 은행 (의심목록)","in.lastSync":"최종 동기화","in.version":"목록 버전","in.size":"보유 건수","in.syncNow":"지금 동기화",
   "in.hint":"SIMO 의심목록은 모든 은행 공통(글로벌)입니다. ‘지금 동기화’는 전체 스냅샷을 받아 코어로 전달합니다. (증분 갱신은 전송량만 줄이는 내부 최적화로 결과는 동일.)",
@@ -35,7 +35,7 @@ const I18N={
   "out.segToday":"Live (today)","out.segDate":"By date","out.perApi":"Per-API today","out.recent":"Recent transactions","out.gen":"Generate demo tx",
   "out.cCount":"Count","out.cOk":"OK","out.cPartial":"Partial","out.cFail":"Fail","out.cTarget":"Target recs","out.cApi":"API","out.cMode":"Mode","out.cTime":"Time","out.cResult":"Result","out.none":"No transactions","out.filtered":"API filter",
   "out.from":"From","out.to":"To","out.api":"API","out.dailySum":"Daily summary","out.cDate":"Date","out.dayDetail":"Day detail (by time)",
-  "out.dTitle":"Transaction detail (SIMO message)","out.req":"Request","out.res":"Response","out.recvN":"SIMO accepted","out.rejN":"Rejected","out.rejList":"Rejected records","out.body":"Message body (sample)","out.map":"Layout mapping","out.raw":"Raw (JSON)","out.rec":"Sample","out.fNo":"No","out.fName":"Field","out.fType":"Type","out.fReq":"Req","out.fDesc":"Description","out.fVal":"Value",
+  "out.dTitle":"Transaction detail (SIMO message)","out.req":"Request","out.res":"Response","out.recvN":"SIMO accepted","out.rejN":"Rejected","out.rejList":"Rejected records","out.body":"Message body (sample)","out.map":"Layout mapping","out.raw":"Raw (JSON)","out.rec":"Sample","out.fNo":"No","out.fName":"Field","out.fType":"Type","out.fReq":"Req","out.fDesc":"Description","out.fVal":"Value","out.allRecs":"All target records","out.search":"Search account / name / CIF","out.cAcc":"Account no.","out.cDob":"DOB","out.cStatus":"Status","out.statusOK":"OK","out.noMatch":"No matching records","out.showing":"Showing",
   "mode.BATCH":"Batch","mode.EVENT":"Event",
   "in.title":"SIMO → Bank (suspect list)","in.lastSync":"Last sync","in.version":"List version","in.size":"Held","in.syncNow":"Sync now",
   "in.hint":"The SIMO suspect list is global (identical for all banks). ‘Sync now’ pulls the full snapshot and forwards it to core. (Incremental is just a transfer optimization — same result.)",
@@ -59,7 +59,7 @@ const I18N={
   "out.segToday":"Trực tiếp (hôm nay)","out.segDate":"Theo ngày","out.perApi":"Theo API hôm nay","out.recent":"Giao dịch gần đây","out.gen":"Tạo giao dịch demo",
   "out.cCount":"Số","out.cOk":"OK","out.cPartial":"Một phần","out.cFail":"Lỗi","out.cTarget":"Bản ghi","out.cApi":"API","out.cMode":"Kiểu","out.cTime":"Thời gian","out.cResult":"Kết quả","out.none":"Không có","out.filtered":"Lọc API",
   "out.from":"Từ ngày","out.to":"Đến ngày","out.api":"API","out.dailySum":"Tóm tắt theo ngày","out.cDate":"Ngày","out.dayDetail":"Chi tiết ngày (theo giờ)",
-  "out.dTitle":"Chi tiết giao dịch (gói tin SIMO)","out.req":"Yêu cầu","out.res":"Phản hồi","out.recvN":"SIMO nhận","out.rejN":"Từ chối","out.rejList":"Bản ghi bị từ chối","out.body":"Nội dung (mẫu)","out.map":"Ánh xạ layout","out.raw":"Gốc (JSON)","out.rec":"Mẫu","out.fNo":"No","out.fName":"Trường","out.fType":"Kiểu","out.fReq":"BB","out.fDesc":"Mô tả","out.fVal":"Giá trị",
+  "out.dTitle":"Chi tiết giao dịch (gói tin SIMO)","out.req":"Yêu cầu","out.res":"Phản hồi","out.recvN":"SIMO nhận","out.rejN":"Từ chối","out.rejList":"Bản ghi bị từ chối","out.body":"Nội dung (mẫu)","out.map":"Ánh xạ layout","out.raw":"Gốc (JSON)","out.rec":"Mẫu","out.fNo":"No","out.fName":"Trường","out.fType":"Kiểu","out.fReq":"BB","out.fDesc":"Mô tả","out.fVal":"Giá trị","out.allRecs":"Toàn bộ bản ghi","out.search":"Tìm TK / tên / CIF","out.cAcc":"Số TK","out.cDob":"Ngày sinh","out.cStatus":"Trạng thái","out.statusOK":"OK","out.noMatch":"Không có kết quả","out.showing":"Hiển thị",
   "mode.BATCH":"Lô","mode.EVENT":"Sự kiện",
   "in.title":"SIMO → Ngân hàng (danh sách nghi ngờ)","in.lastSync":"Đồng bộ cuối","in.version":"Phiên bản","in.size":"Đang giữ","in.syncNow":"Đồng bộ ngay",
   "in.hint":"Danh sách nghi ngờ SIMO là chung cho mọi ngân hàng. ‘Đồng bộ ngay’ lấy toàn bộ snapshot và chuyển cho core. (Tăng dần chỉ tối ưu truyền — kết quả như nhau.)",
@@ -116,28 +116,40 @@ VIEW.dash=async()=>{
    '<div class="panel"><h3>'+t("dash.recent")+'</h3><div class="log">'+xl+'</div></div>';
 };
 
-// ---- shared transaction detail (SIMO message + layout mapping) ----
-let CURDET=null;
-async function showRelay(id){
-  const r=await api("/api/relay/"+id); CURDET=r;
-  const rej=(r.rejected||[]).slice(0,12).map(x=>'<tr><td class="c">'+x.index+'</td><td>'+(x.account||'-')+'</td><td>'+x.field+'</td><td>'+errt(x.code)+'</td></tr>').join("");
+// ---- shared transaction detail (SIMO message + full target records + layout mapping) ----
+let CURDET=null, DET={id:null,page:1,q:"",size:15};
+async function showRelay(id){ DET={id:id,page:1,q:"",size:15}; await loadRelay(); }
+async function loadRelay(){
+  const r=await api("/api/relay/"+DET.id+"?page="+DET.page+"&size="+DET.size+"&q="+encodeURIComponent(DET.q)); CURDET=r;
+  const rej=(r.rejected||[]).slice(0,12).map(x=>'<tr><td class="c">'+(x.index+1)+'</td><td>'+(x.account||'-')+'</td><td>'+x.field+'</td><td>'+errt(x.code)+'</td></tr>').join("");
   const rejB=(r.rejected&&r.rejected.length)?'<div class="kv" style="margin-top:8px;color:var(--warn)">'+t("out.rejList")+' ('+r.rejected.length+')</div><table><thead><tr><th class="c">#</th><th>'+t("in.cIdent")+'</th><th>field</th><th>'+t("out.cResult")+'</th></tr></thead><tbody>'+rej+'</tbody></table>':"";
-  const recBtns=(r.sample||[]).map((rec,i)=>'<button class="btn ghost sm" onclick="__mapRec('+i+')">'+t("out.rec")+' '+(i+1)+'</button>').join(" ");
+  const trows=(r.records||[]).map(rec=>{ const rj=rec.__rej;
+    return '<tr class="clickable" onclick="__mapRec('+rec.__i+')"><td class="c tnum">'+(rec.__i+1)+'</td><td><code class="k">'+esc(rec.Cif)+'</code></td><td>'+esc(rec.TenKhachHang)+'</td><td class="tnum">'+esc(rec.SoTaiKhoan||'-')+'</td><td class="c tnum">'+esc(rec.NgaySinh)+'</td><td class="c">'+(rj?'<span class="tag bad">'+t("out.rejN")+'</span>':'<span class="tag ok">'+t("out.statusOK")+'</span>')+'</td></tr>';
+  }).join("")||'<tr><td colspan="6" class="muted">'+t("out.noMatch")+'</td></tr>';
+  const from=r.total?((r.page-1)*r.size+1):0, to=Math.min(r.page*r.size,r.total);
   modal('<div class="kv">'+r.id+' · <code class="k">'+r.svc+'</code> · <span class="tag '+(r.mode==='BATCH'?'ba':'ev')+'">'+t("mode."+r.mode)+'</span> · '+codeTag(r.code)+' · '+hhmmss(r.ts)+'</div>'+
-    '<div class="panel" style="margin:8px 0;padding:12px"><div class="kv">'+t("out.req")+'</div><pre>POST '+esc(r.endpoint)+'\nHost: mgsimo.sbv.gov.vn\nAuthorization: Bearer ***\nmaYeuCau: '+esc(r.maYeuCau)+'\nkyBaoCao: '+esc(r.kyBaoCao)+'\n('+t("out.cTarget")+': '+r.count+(r.sampleNote?(" · "+esc(r.sampleNote)):"")+')</pre>'+
+    '<div class="panel" style="margin:8px 0;padding:12px"><div class="kv">'+t("out.req")+'</div><pre>POST '+esc(r.endpoint)+'\nHost: mgsimo.sbv.gov.vn\nAuthorization: Bearer ***\nmaYeuCau: '+esc(r.maYeuCau)+'\nkyBaoCao: '+esc(r.kyBaoCao)+'\n('+t("out.cTarget")+': '+r.count.toLocaleString()+')</pre>'+
     '<div class="kv" style="margin-top:8px">'+t("out.res")+'</div><div class="small">'+codeTag(r.code)+' · '+t("out.recvN")+' <b>'+r.accepted+'</b> / '+t("out.rejN")+' <b>'+(r.rejectedCount||0)+'</b></div>'+rejB+'</div>'+
-    '<div class="kv">'+t("out.body")+' · '+t("out.map")+'</div><div class="btnrow" style="margin-bottom:8px">'+recBtns+' <button class="btn ghost sm" onclick="__rawRec()">'+t("out.raw")+'</button></div>'+
-    '<div id="mapBox"></div>'+
-    '<div class="btnrow" style="justify-content:flex-end;margin-top:12px"><button class="btn" onclick="closeModal()">'+t("common.close")+'</button></div>');
-  __mapRec(0);
+    '<div class="kv">'+t("out.allRecs")+' · '+t("out.cTarget")+' <b>'+r.count.toLocaleString()+'</b></div>'+
+    '<div class="searchbar"><input class="ui" id="dq" placeholder="'+t("out.search")+'" value="'+esc(DET.q)+'"><button class="btn blue sm" id="dqGo">'+t("common.query")+'</button>'+(DET.q?(' <button class="btn ghost sm" id="dqClr">'+t("common.clear")+'</button>'):'')+'</div>'+
+    '<table><thead><tr><th class="c">'+t("out.fNo")+'</th><th>CIF</th><th>'+t("in.cName")+'</th><th>'+t("out.cAcc")+'</th><th class="c">'+t("out.cDob")+'</th><th class="c">'+t("out.cStatus")+'</th></tr></thead><tbody>'+trows+'</tbody></table>'+
+    '<div class="pager"><button class="btn ghost sm" id="dpp"'+(r.page<=1?' disabled':'')+'>'+t("common.prev")+'</button><span>'+t("common.page")+' '+r.page+'/'+r.pages+'</span><button class="btn ghost sm" id="dpn"'+(r.page>=r.pages?' disabled':'')+'>'+t("common.next")+'</button><span class="small">· '+t("out.showing")+' '+from+'–'+to+' / '+r.total.toLocaleString()+'</span></div>'+
+    '<div class="kv" style="margin-top:12px">'+t("out.map")+' <span class="small muted">('+t("common.detail")+': '+t("out.fName")+' 클릭)</span></div><div id="mapBox"></div>'+
+    '<div class="btnrow" style="justify-content:flex-end;margin-top:12px"><button class="btn" onclick="closeModal()">'+t("common.close")+'</button></div>', "wide");
+  const dq=$("#dq"); if(dq) dq.onkeydown=function(e){ if(e.key==="Enter"){ DET.q=dq.value.trim(); DET.page=1; loadRelay(); } };
+  if($("#dqGo")) $("#dqGo").onclick=function(){ DET.q=$("#dq").value.trim(); DET.page=1; loadRelay(); };
+  if($("#dqClr")) $("#dqClr").onclick=function(){ DET.q=""; DET.page=1; loadRelay(); };
+  if($("#dpp")) $("#dpp").onclick=function(){ if(DET.page>1){ DET.page--; loadRelay(); } };
+  if($("#dpn")) $("#dpn").onclick=function(){ if(DET.page<r.pages){ DET.page++; loadRelay(); } };
+  if(r.records&&r.records.length) __mapRec(r.records[0].__i);
 }
-function __mapRec(i){
-  if(!CURDET) return; const rec=(CURDET.sample||[])[i]; if(!rec) return;
-  const rows=CURDET.layout.map(f=>{ const val=rec[f.name]; const has=val!==undefined&&val!==null&&val!==""; 
+function __mapRec(gi){ if(!CURDET||!CURDET.records) return; const rec=CURDET.records.find(x=>x.__i===gi); if(!rec) return;
+  const rows=CURDET.layout.map(f=>{ const val=rec[f.name]; const has=val!==undefined&&val!==null&&val!=="";
     return '<tr><td class="c">'+f.no+'</td><td><code class="k">'+f.name+'</code></td><td class="small">'+f.type+'</td><td class="c">'+(f.req?'<b style="color:var(--warn)">x</b>':'-')+'</td><td class="small">'+esc(f.desc)+'</td><td>'+(has?esc(val):'<span class="muted">-</span>')+'</td></tr>'; }).join("");
-  $("#mapBox").innerHTML='<table><thead><tr><th class="c">'+t("out.fNo")+'</th><th>'+t("out.fName")+'</th><th>'+t("out.fType")+'</th><th class="c">'+t("out.fReq")+'</th><th>'+t("out.fDesc")+'</th><th>'+t("out.fVal")+'</th></tr></thead><tbody>'+rows+'</tbody></table>';
+  $("#mapBox").innerHTML='<div class="small" style="margin-bottom:5px">#'+(rec.__i+1)+' · <code class="k">'+esc(rec.SoTaiKhoan||rec.Cif)+'</code> '+(rec.__rej?('<span class="tag bad">'+errt(rec.__rej.code)+'</span>'):'')+' <a href="#" onclick="__rawRec('+rec.__i+');return false" style="color:var(--blue)">'+t("out.raw")+'</a></div>'+
+    '<table><thead><tr><th class="c">'+t("out.fNo")+'</th><th>'+t("out.fName")+'</th><th>'+t("out.fType")+'</th><th class="c">'+t("out.fReq")+'</th><th>'+t("out.fDesc")+'</th><th>'+t("out.fVal")+'</th></tr></thead><tbody>'+rows+'</tbody></table>';
 }
-function __rawRec(){ if(!CURDET) return; $("#mapBox").innerHTML='<pre>'+esc(JSON.stringify((CURDET.sample||[])[0],null,2))+'</pre>'; }
+function __rawRec(gi){ if(!CURDET||!CURDET.records) return; const rec=CURDET.records.find(x=>x.__i===gi)||CURDET.records[0]; const o=Object.assign({},rec); delete o.__i; delete o.__rej; $("#mapBox").innerHTML='<pre>'+esc(JSON.stringify(o,null,2))+'</pre>'; }
 window.__showRelay=showRelay; window.__mapRec=__mapRec; window.__rawRec=__rawRec;
 
 VIEW.out=(()=>{ let seg="today", st={from:null,to:null,svc:"",detailDate:null,filter:""};

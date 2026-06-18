@@ -66,24 +66,34 @@ const pad=(n,l)=>String(n).padStart(l,"0");
 const dkey=ts=>new Date(ts+TZ).toISOString().slice(0,10);
 const todayKey=()=>dkey(Date.now());
 const vname=()=>rnd(HO)+" "+rnd(DEM)+" "+rnd(TEN);
+// deterministic PRNG so a relay's full record set regenerates identically on every detail/page/search call
+function mulberry32(a){ return function(){ a|=0; a=a+0x6D2B79F5|0; let t=Math.imul(a^a>>>15,1|a); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
+function hseed(s){ let h=2166136261>>>0; for(let i=0;i<s.length;i++){ h^=s.charCodeAt(i); h=Math.imul(h,16777619); } return h>>>0; }
+const rndR=(g,a)=>a[Math.floor(g()*a.length)];
+const riR=(g,a,b)=>a+Math.floor(g()*(b-a+1));
+const vnameR=g=>rndR(g,HO)+" "+rndR(g,DEM)+" "+rndR(g,TEN);
 
 const REASONS=["FRAUD_SUSPECT","MULE_ACCOUNT","REPORTED_POLICE","ABNORMAL_FLOW"];
-function coreRecord(svc, defect){
+function coreRecord(svc, defect, g){ g=g||Math.random;
   const op=CAT[svc]?CAT[svc].op:""; const sus=/SUSPECT/.test(op);
-  const r={ Cif:"CIF"+pad(ri(1,99999),5), SoID:pad(ri(100000000000,999999999999),12), LoaiID:rnd([1,1,3,4]),
-    TenKhachHang:vname(), NgaySinh:pad(ri(1,28),2)+"/"+pad(ri(1,12),2)+"/"+ri(1975,2004), GioiTinh:rnd([0,1]),
-    MaSoThue: Math.random()<0.5? pad(ri(1000000000,9999999999),10):"",
-    SoDienThoaiDangKyDichVu:"09"+pad(ri(0,99999999),8),
-    DiaChi: Math.random()<0.7? rnd(["Q1, TP.HCM","Cau Giay, Ha Noi","Hai Chau, Da Nang"]) : "",
-    DiaChiKiemSoatTruyCap:"AC:DE:"+pad(ri(0,9999),4)+":"+pad(ri(0,99),2),
-    MaSoNhanDangThietBiDiDong: Math.random()<0.6? pad(ri(100000000000000,999999999999999),15):"",
-    SoTaiKhoan:"19"+pad(ri(100000000,999999999),8), LoaiTaiKhoan:rnd([1,1,2]),
-    TrangThaiHoatDongTaiKhoan: sus?rnd([3,4]):1, NgayMoTaiKhoan:pad(ri(1,28),2)+"/06/2026",
-    PhuongThucMoTaiKhoan:rnd([1,2]), NgayXacThucTaiQuay:"", QuocTich:"VN" };
+  const r={ Cif:"CIF"+pad(riR(g,1,99999),5), SoID:pad(riR(g,100000000000,999999999999),12), LoaiID:rndR(g,[1,1,3,4]),
+    TenKhachHang:vnameR(g), NgaySinh:pad(riR(g,1,28),2)+"/"+pad(riR(g,1,12),2)+"/"+riR(g,1975,2004), GioiTinh:rndR(g,[0,1]),
+    MaSoThue: g()<0.5? pad(riR(g,1000000000,9999999999),10):"",
+    SoDienThoaiDangKyDichVu:"09"+pad(riR(g,0,99999999),8),
+    DiaChi: g()<0.7? rndR(g,["Q1, TP.HCM","Cau Giay, Ha Noi","Hai Chau, Da Nang"]) : "",
+    DiaChiKiemSoatTruyCap:"AC:DE:"+pad(riR(g,0,9999),4)+":"+pad(riR(g,0,99),2),
+    MaSoNhanDangThietBiDiDong: g()<0.6? pad(riR(g,100000000000000,999999999999999),15):"",
+    SoTaiKhoan:"19"+pad(riR(g,100000000,999999999),8), LoaiTaiKhoan:rndR(g,[1,1,2]),
+    TrangThaiHoatDongTaiKhoan: sus?rndR(g,[3,4]):1, NgayMoTaiKhoan:pad(riR(g,1,28),2)+"/06/2026",
+    PhuongThucMoTaiKhoan:rndR(g,[1,2]), NgayXacThucTaiQuay:"", QuocTich:"VN" };
   if(sus) r.NghiNgo=1;
-  if(defect){ if(Math.random()<0.5) r.NgaySinh="1990-01-01"; else r.SoTaiKhoan=""; }
+  if(defect){ if(g()<0.5) r.NgaySinh="1990-01-01"; else r.SoTaiKhoan=""; }
   return r;
 }
+// per-relay deterministic record + defect injection (regenerable from stored relay meta)
+function isDefect(relay,i){ if(relay.count<=4) return false; return mulberry32(hseed(relay.id+":d:"+i))() < 0.02; }
+function genRecord(relay,i){ return coreRecord(relay.svc, isDefect(relay,i), mulberry32(hseed(relay.id+":"+i))); }
+function relayRejects(relay){ const rej=[]; for(let i=0;i<relay.count;i++){ const r=genRecord(relay,i); const e=validateRecord(r); if(e) rej.push({index:i,account:r.SoTaiKhoan||null,field:e.field,code:e.code}); } return rej; }
 const DEMO_BL=[
   {entryId:"S-DEMO01", identifier:"9988776655", kind:"ACCOUNT", reason:"FRAUD_SUSPECT", TenKhachHang:"Le Van Mule"},
   {entryId:"S-DEMO02", identifier:"1234509876", kind:"ACCOUNT", reason:"REPORTED_POLICE", TenKhachHang:"Tran Thi Scam"},
@@ -110,14 +120,14 @@ function validateRecord(r){
   return null;
 }
 function makeRelay(svc, count, ts){
-  const cat=CAT[svc]||{mode:"EVENT"}; const SN=Math.min(count,8); const sample=[]; const rej=[];
-  for(let i=0;i<SN;i++){ const d=count>4 && i%6===4; const rec=coreRecord(svc,d); sample.push(rec); const e=validateRecord(rec); if(e) rej.push({index:i,account:rec.SoTaiKhoan||null,field:e.field,code:e.code}); }
-  let rejectedCount = count>4 ? Math.round(rej.length*(count/Math.max(1,SN))) : (Math.random()<0.12?1:0);
-  if(rej.length && !rejectedCount) rejectedCount=rej.length;
+  const cat=CAT[svc]||{mode:"EVENT"};
   DB.seq.relay++; const id="RLY"+pad(DB.seq.relay,4);
-  return { id, ts, svc, mode:cat.mode, count, code:rejectedCount?"01":"00", success:!rejectedCount,
-    accepted:count-rejectedCount, rejectedCount, rejected:rej,
-    maYeuCau:"IBKVN-"+dkey(ts).replace(/-/g,"")+"-"+pad(DB.seq.relay,4), kyBaoCao:"06/2026", sample, sampleNote: count>SN?("표본 "+SN+"/총 "+count+"건"):null };
+  const r={ id, ts, svc, mode:cat.mode, count,
+    maYeuCau:"IBKVN-"+dkey(ts).replace(/-/g,"")+"-"+pad(DB.seq.relay,4), kyBaoCao:"06/2026" };
+  const rej=relayRejects(r);                       // full set generated deterministically; counts are exact
+  r.rejected=rej; r.rejectedCount=rej.length; r.accepted=count-rej.length;
+  r.code=rej.length?"01":"00"; r.success=!rej.length;
+  return r;
 }
 (function seed(){ for(let d=6;d>=0;d--){ const base=Date.now()-d*86400000; const num=ri(6,16);
   for(let i=0;i<num;i++){ const ts=base-ri(0,9*3600*1000)+ri(0,3600*1000); const svc=rnd(API_CATALOG).code;
@@ -196,22 +206,30 @@ async function gatewayApi(req,res,parsed,body){
   }
   if(/^\/api\/relay\/RLY[0-9]+$/.test(p) && req.method==="GET"){
     const id=p.split("/")[3]; const r=DB.relays.find(x=>x.id===id); if(!r) return send(404,{error:"not found"});
+    const rejSet={}; (r.rejected||[]).forEach(x=>{ rejSet[x.index]={field:x.field,code:x.code}; });
+    let recs=[]; for(let i=0;i<r.count;i++){ const o=genRecord(r,i); o.__i=i; if(rejSet[i]) o.__rej=rejSet[i]; recs.push(o); }   // full target set, regenerated
+    const qq=(q.q||"").trim().toLowerCase();
+    if(qq) recs=recs.filter(function(o){ for(const k in o){ if(k.charAt(0)==="_")continue; const v=o[k]; if(v!=null && String(v).toLowerCase().indexOf(qq)>=0) return true; } return false; });
+    const total=recs.length; const page=Math.max(1,Number(q.page||1)); const size=Math.min(100,Math.max(1,Number(q.size||15)));
+    const pages=Math.max(1,Math.ceil(total/size)); const pg=Math.min(page,pages);
     return send(200,{ id:r.id, ts:r.ts, svc:r.svc, mode:r.mode, count:r.count, code:r.code, success:r.success, accepted:r.accepted, rejectedCount:r.rejectedCount, rejected:r.rejected||[],
-      endpoint:REPORT_EP, maYeuCau:r.maYeuCau, kyBaoCao:r.kyBaoCao, layout:layoutFor(r.svc), sample:r.sample||[], sampleNote:r.sampleNote });
+      endpoint:REPORT_EP, maYeuCau:r.maYeuCau, kyBaoCao:r.kyBaoCao, layout:layoutFor(r.svc),
+      q:q.q||"", total:total, page:pg, pages:pages, size:size, records:recs.slice((pg-1)*size,pg*size) });
   }
   if(p==="/api/relay/report" && req.method==="POST"){
     const b=JSON.parse(body||"{}"); const svc=b.svc||rnd(EVENT_SVCS); const cat=CAT[svc]||{mode:"EVENT"};
     const count=Math.max(1,Math.min(2000,Number(b.count||(cat.mode==="BATCH"?ri(40,300):ri(1,3)))));
-    const records=[]; for(let i=0;i<count;i++) records.push(coreRecord(svc, count>4 && i%9===4));
     DB.seq.relay++; const id="RLY"+pad(DB.seq.relay,4); const maYeuCau="IBKVN-"+todayKey().replace(/-/g,"")+"-"+pad(DB.seq.relay,4);
+    const rec={ id:id, ts:Date.now(), svc:svc, mode:cat.mode, count:count, maYeuCau:maYeuCau, kyBaoCao:"06/2026" };
+    const records=[]; for(let i=0;i<count;i++) records.push(genRecord(rec,i));   // deterministic -> detail regenerates the same set
     const tk=await getToken();
     const resp=await callSimo("POST",REPORT_EP,{authorization:"Bearer "+tk.access_token,"content-type":"application/json",mayeucau:maYeuCau,kybaocao:"06/2026"},records);
     const r=resp.body||{};
-    const rec={ id:id, ts:Date.now(), svc:svc, mode:cat.mode, count:count, code:r.code, success:!!r.success, accepted:r.accepted==null?null:r.accepted, rejected:r.rejected||[], rejectedCount:r.rejectedCount||0,
-      maYeuCau:maYeuCau, kyBaoCao:"06/2026", sample:records.slice(0,8), sampleNote: count>8?("표본 8/총 "+count+"건"):null };
+    rec.code=r.code; rec.success=!!r.success; rec.rejected=r.rejected||[]; rec.rejectedCount=r.rejectedCount||0;
+    rec.accepted=(r.accepted==null)?(count-rec.rejectedCount):r.accepted;
     DB.relays.unshift(rec); if(DB.relays.length>2000) DB.relays.pop();
-    tx("REPORT", svc, "중계 "+count+"건 -> SIMO", "code "+r.code+" (수신 "+r.accepted+"/반려 "+(r.rejectedCount||0)+")");
-    return send(200,{ id:id, svc:svc, count:count, code:r.code, accepted:r.accepted, rejectedCount:r.rejectedCount });
+    tx("REPORT", svc, "중계 "+count+"건 -> SIMO", "code "+r.code+" (수신 "+rec.accepted+"/반려 "+rec.rejectedCount+")");
+    return send(200,{ id:id, svc:svc, count:count, code:r.code, accepted:rec.accepted, rejectedCount:rec.rejectedCount });
   }
   if(p==="/api/suspect/status" && req.method==="GET")
     return send(200,{ lastSync:DB.suspectMeta.lastSync, version:DB.suspectMeta.version, size:DB.suspect.length, lastRecv:DB.suspectMeta.lastRecv, lastDeliver:DB.suspectMeta.lastDeliver });
