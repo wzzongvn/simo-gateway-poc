@@ -210,6 +210,9 @@ async function gatewayApi(req,res,parsed,body){
     let recs=[]; for(let i=0;i<r.count;i++){ const o=genRecord(r,i); o.__i=i; if(rejSet[i]) o.__rej=rejSet[i]; recs.push(o); }   // full target set, regenerated
     const qq=(q.q||"").trim().toLowerCase();
     if(qq) recs=recs.filter(function(o){ for(const k in o){ if(k.charAt(0)==="_")continue; const v=o[k]; if(v!=null && String(v).toLowerCase().indexOf(qq)>=0) return true; } return false; });
+    if(q.all==="1"||q.all==="true"){   // full (filtered) set for Excel export, no pagination
+      return send(200,{ id:r.id, ts:r.ts, svc:r.svc, mode:r.mode, count:r.count, code:r.code, success:r.success, accepted:r.accepted, rejectedCount:r.rejectedCount, rejected:r.rejected||[],
+        endpoint:REPORT_EP, maYeuCau:r.maYeuCau, kyBaoCao:r.kyBaoCao, layout:layoutFor(r.svc), q:q.q||"", total:recs.length, records:recs }); }
     const total=recs.length; const page=Math.max(1,Number(q.page||1)); const size=Math.min(100,Math.max(1,Number(q.size||15)));
     const pages=Math.max(1,Math.ceil(total/size)); const pg=Math.min(page,pages);
     return send(200,{ id:r.id, ts:r.ts, svc:r.svc, mode:r.mode, count:r.count, code:r.code, success:r.success, accepted:r.accepted, rejectedCount:r.rejectedCount, rejected:r.rejected||[],
